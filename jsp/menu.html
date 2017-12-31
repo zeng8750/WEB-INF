@@ -164,7 +164,8 @@
                btn:['保存','取消'],
                yes:function (index) {
                    var form=layer.getChildFrame('#addForm',index);
-                   console.info(form);
+                   var submit=form.find('#submit');
+                   submit.click();
                }
            })
        });

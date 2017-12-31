@@ -13,57 +13,99 @@
 </head>
 <body>
 <form id="addForm" class="layui-form" action="#">
-   <div class="layui-form-item">
-       <label class="layui-form-label">菜单名称</label>
-       <input name="menuName" type="text" class="layui-input" lay-verify="required"/>
-   </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单连接</label>
-        <input name="menuLink" type="text" class="layui-input" lay-varify="required"/>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">父级菜单</label>
-        <select name="menuFather" class="layui-form-select" id="fatherMenu" >
-            <option value="0">请选择</option>
-        </select>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">菜单图片</label>
-        <input type="file" name="img">
-        <img id src="" class="layui-nav-img">
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">是否可见</label>
-        <input name="isVisable" class="layui-form-checkbox" type="checkbox">
+    <div class="layui-container" style="margin-top: 2%">
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="muenName" required  lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单连接</label>
+            <div class="layui-input-block">
+                <input name="menuLink" type="text" class="layui-input" lay-varify="required"/>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-block">
+                <select id="fatherMenu" name="city" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" id="uploadImg">
+            <label class="layui-form-label">菜单图片</label>
+            <button name="img" type="button" class="layui-btn" id="test1">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+            </button>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否可见</label>
+            <input name="isVisable" class="layui-form-checkbox" type="checkbox">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <input id="submit" type="hidden" class="layui-btn" lay-submit lay-filter="formDemo"/>
     </div>
 </form>
-
-
 <!--加载form-->
 <script>
     //Demo
     layui.use('form', function(){
         var form = layui.form;
         var $=layui.jquery;
+        var layer=layui.layer;
         //监听提交
         form.on('submit(formDemo)', function(data){
-            layer.msg(JSON.stringify(data.field));
 
-            form.vali
-            return false;
+            layer.alert(JSON.stringify(data.field),function () {
+                var index = parent.layer.getFrameIndex(window.name);
+               //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
+            });
         });
         $.post("../json/fatherMenu.json",{},function (data) {
-            console.info(data);
             for(var i=0;i<data.length;i++) {
                 $("#fatherMenu").append('<option value=' + data[i].id + '>' + data[i].name + '</option>')
             }
             form.render('select');
         });
-
-
-
-
         form.render('checkbox');
+    });
+</script>
+<!--图片上传-->
+<script>
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        var form=layui.form;
+        var $=layui.jquery;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: '' //上传接口
+             ,auto:true
+            ,accept:"images"
+            ,exts:"gif|png|jpg"
+            ,choose:function (obj) {
+                
+              var html='<img src="../img/1.png" width="100px" height="100px">';
+              $("#uploadImg").append(html);
+              form.render();
+            },before:function (obj) {
+                layer.load();
+            }
+            ,done: function(res){
+                //上传完毕回调
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
     });
 </script>
 </body>
