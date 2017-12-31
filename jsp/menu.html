@@ -45,9 +45,7 @@
 </fieldset>
     <div class="layui-row">
         <div class="layui-btn-group">
-            <button class="layui-btn layui-btn-sm" data-type="getCheckData"><i class="layui-icon">&#xe654;</i>添加</button>
-            <button class="layui-btn layui-btn-sm" data-type="getCheckLength"><i class="layui-icon">&#xe642;</i>编辑</button>
-            <button class="layui-btn layui-btn-sm" data-type="isAll"><i class="layui-icon">&#xe640;</i>删除</button>
+            <button class="layui-btn layui-btn-sm" id="add"><i class="layui-icon">&#xe654;</i>添加</button>
         </div>
     </div>
     <div class="layui-row">
@@ -73,6 +71,7 @@
     <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
+<!--table加载-->
 <script>
     layui.use('table', function(){
         var table = layui.table;
@@ -120,8 +119,8 @@
         });
     });
 </script>
+<!--form加载-->
 <script>
-
     layui.use(['layer','form'],function () {
         var $=layui.jquery;
         var layer=layui.layer;
@@ -148,6 +147,27 @@
                 }
             });
         });
+    });
+</script>
+<!--点击事件-->
+<script>
+    layui.use('element',function () {
+       var $=layui.jquery;
+       var layer=layui.layer;
+       var add=$("#add");
+       add.click(function () {
+           layer.open({
+               type:2,
+               title:'添加',
+               content:'form.html',
+               area : ['800px' , '520px'],
+               btn:['保存','取消'],
+               yes:function (index) {
+                   var form=layer.getChildFrame('#addForm',index);
+                   console.info(form);
+               }
+           })
+       });
     });
 </script>
 </body>
